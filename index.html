@@ -1,0 +1,521 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>INⱯCHE - Кавер-фестиваль</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #000000;
+            color: #ddd;
+        }
+        header {
+            position: relative;
+            background-image: url('https://via.placeholder.com/1920x1080/111111/ffffff?text=INACHE+Background');
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-start;
+            align-items: center;
+            text-align: center;
+            padding-top: 100px;
+            overflow: hidden;
+        }
+        header::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: rgba(0, 0, 0, 0.65);
+            z-index: 1;
+        }
+        header > * {
+            position: relative;
+            z-index: 2;
+        }
+
+        /* Анимация заголовка */
+        header h1 {
+            margin: 0;
+            font-size: 7em;
+            color: #ff0000;
+            text-shadow: 0 4px 15px rgba(0,0,0,0.8);
+            opacity: 0;
+            transform: translateY(-50px);
+            animation: fadeInDown 1.5s ease-out forwards;
+        }
+
+        header p.subtitle {
+            margin: 20px 0 0;
+            font-size: 2.8em;
+            color: #ff8800;
+            text-shadow: 0 2px 10px rgba(0,0,0,0.8);
+            opacity: 0;
+            transform: translateY(50px);
+            animation: fadeInUp 1.5s ease-out 0.5s forwards;
+        }
+
+        @keyframes fadeInDown {
+            0% { opacity: 0; transform: translateY(-50px); }
+            100% { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes fadeInUp {
+            0% { opacity: 0; transform: translateY(50px); }
+            100% { opacity: 1; transform: translateY(0); }
+        }
+
+        header h1::after {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: radial-gradient(circle, rgba(255,0,0,0.3) 0%, transparent 70%);
+            opacity: 0;
+            animation: pulseGlow 4s infinite alternate;
+            pointer-events: none;
+        }
+
+        @keyframes pulseGlow {
+            0% { opacity: 0; transform: scale(0.9); }
+            100% { opacity: 0.4; transform: scale(1.1); }
+        }
+
+        nav {
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            display: flex;
+            justify-content: center;
+            background-color: rgba(34, 34, 34, 0.9);
+            backdrop-filter: blur(10px);
+            flex-wrap: wrap;
+        }
+        nav button {
+            background: none;
+            border: none;
+            color: #fff;
+            padding: 15px 20px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: background-color 0.3s;
+        }
+        nav button:hover {
+            background-color: rgba(51, 51, 51, 0.8);
+        }
+        nav button.active {
+            background-color: rgba(68, 68, 68, 0.8);
+        }
+        .tab-content {
+            display: none;
+            padding: 50px 20px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        .tab-content.active {
+            display: block;
+        }
+        #countdown {
+            font-size: 2em;
+            color: #ff8800;
+            margin: 30px 0;
+            text-shadow: 0 2px 10px rgba(0,0,0,0.8);
+        }
+
+        /* Стили для формы анкеты */
+        .application-form {
+            background: #111;
+            padding: 40px;
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(255,255,255,0.05);
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        .application-form h2 {
+            color: #ff8800;
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        .application-form label {
+            display: block;
+            margin-bottom: 10px;
+            font-size: 1.2em;
+            color: #ddd;
+        }
+        .application-form input,
+        .application-form textarea {
+            width: 100%;
+            padding: 12px;
+            margin-bottom: 25px;
+            background: #222;
+            border: none;
+            border-radius: 8px;
+            color: #fff;
+            font-size: 1em;
+        }
+        .application-form textarea {
+            min-height: 150px;
+            resize: vertical;
+        }
+        .application-form button {
+            display: block;
+            width: 100%;
+            padding: 15px;
+            background: #ff0000;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 1.3em;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+        .application-form button:hover {
+            background: #cc0000;
+        }
+
+        .tickets {
+            text-align: center;
+            font-size: 1.2em;
+        }
+        .tickets a {
+            display: inline-block;
+            margin: 20px;
+            padding: 15px 30px;
+            background-color: #ff0000;
+            color: white;
+            text-decoration: none;
+            border-radius: 8px;
+            font-weight: bold;
+            transition: background-color 0.3s;
+        }
+        .tickets a:hover {
+            background-color: #cc0000;
+        }
+
+        .albums-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+        }
+        .album-cover {
+            position: relative;
+            overflow: hidden;
+            border-radius: 12px;
+            box-shadow: 0 8px 20px rgba(255, 255, 255, 0.1);
+            cursor: pointer;
+            transition: transform 0.4s, box-shadow 0.4s;
+        }
+        .album-cover:hover {
+            transform: scale(1.05);
+            box-shadow: 0 12px 30px rgba(255, 100, 0, 0.5);
+        }
+        .album-cover img {
+            width: 100%;
+            height: 400px;
+            object-fit: cover;
+            display: block;
+        }
+        .album-overlay {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: linear-gradient(to top, rgba(0,0,0,0.9), transparent);
+            color: white;
+            padding: 40px 20px 20px;
+            text-align: center;
+        }
+        .album-overlay h3 {
+            margin: 0;
+            font-size: 2em;
+            color: #ff8800;
+            text-shadow: 0 2px 10px rgba(0,0,0,0.8);
+        }
+        .full-album {
+            display: none;
+            margin-top: 50px;
+            padding: 30px;
+            background: #111;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(255,255,255,0.05);
+        }
+        .full-album.active {
+            display: block;
+        }
+        .full-album h3 {
+            text-align: center;
+            color: #ff8800;
+            font-size: 2.2em;
+            margin-bottom: 30px;
+        }
+        .full-gallery {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 15px;
+        }
+        .full-gallery img {
+            width: 100%;
+            height: auto;
+            border-radius: 8px;
+            box-shadow: 0 4px 10px rgba(255,255,255,0.1);
+            transition: transform 0.3s;
+        }
+        .full-gallery img:hover {
+            transform: scale(1.08);
+        }
+        .back-btn {
+            display: block;
+            margin: 30px auto 0;
+            padding: 12px 30px;
+            background: #ff0000;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 1.1em;
+            cursor: pointer;
+        }
+        .back-btn:hover {
+            background: #cc0000;
+        }
+
+        .legends {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 25px;
+        }
+        .legend-item {
+            flex: 1 1 320px;
+            background: #111;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 10px rgba(255,255,255,0.05);
+        }
+        .legend-item img {
+            width: 100%;
+            height: auto;
+            border-radius: 8px;
+        }
+
+        footer {
+            text-align: center;
+            padding: 15px;
+            background-color: #111;
+            color: #888;
+            margin-top: 40px;
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1>INⱯCHE</h1>
+        <p class="subtitle">кавер-фестиваль</p>
+    </header>
+
+    <nav>
+        <button onclick="openTab(event, 'upcoming')" class="active">Ближайший фестиваль</button>
+        <button onclick="openTab(event, 'tickets')">Билеты</button>
+        <button onclick="openTab(event, 'gallery')">Галерея</button>
+        <button onclick="openTab(event, 'legends')">Ушедшие легенды</button>
+        <button onclick="openTab(event, 'application')">Анкета для желающих выступить</button>
+    </nav>
+
+    <div id="upcoming" class="tab-content active">
+        <h2>Ближайший фестиваль: 26 апреля 2026</h2>
+        <p>Присоединяйтесь к нам на весеннем фестивале INⱯCHE! Наслаждайтесь кавер-версиями хитов рок и поп музыки от талантливых исполнителей.</p>
+        <p><strong>Место:</strong> Клуб Ласточка, малый зал</p>
+        <p><strong>Время:</strong> 19:00</p>
+        <p><strong>До начала фестиваля осталось:</strong></p>
+        <div id="countdown">Загрузка...</div>
+        <p>Билеты можно приобрести во вкладке «Билеты»</p>
+    </div>
+
+    <div id="tickets" class="tab-content">
+        <h2>Покупка билетов</h2>
+        <div class="tickets">
+            <p>Выберите удобный способ покупки:</p>
+            <a href="https://t.me/your_ticket_bot" target="_blank">Купить через Telegram-бот</a>
+            <a href="https://vk.com/your_festival_group" target="_blank">Купить в группе ВКонтакте</a>
+            <p><small>Замените ссылки на актуальные</small></p>
+        </div>
+    </div>
+
+    <div id="gallery" class="tab-content">
+        <h2>Галерея с прошлых фестивалей</h2>
+
+        <div class="albums-grid" id="albumsGrid">
+            <div class="album-cover" onclick="openAlbum('vol23')">
+                <img src="https://via.placeholder.com/600x800?text=INACHE+Vol.23" alt="INACHE Meet Vol.23">
+                <div class="album-overlay">
+                    <h3>INACHE Meet Vol.23</h3>
+                </div>
+            </div>
+            <div class="album-cover" onclick="openAlbum('vol22')">
+                <img src="https://via.placeholder.com/600x800?text=INACHE+Vol.22" alt="INACHE Meet Vol.22">
+                <div class="album-overlay">
+                    <h3>INACHE Meet Vol.22</h3>
+                </div>
+            </div>
+            <div class="album-cover" onclick="openAlbum('vol21')">
+                <img src="https://via.placeholder.com/600x800?text=INACHE+Vol.21" alt="INACHE Meet Vol.21">
+                <div class="album-overlay">
+                    <h3>INACHE Meet Vol.21</h3>
+                </div>
+            </div>
+            <div class="album-cover" onclick="openAlbum('vol20')">
+                <img src="https://via.placeholder.com/600x800?text=INACHE+Vol.20" alt="INACHE Meet Vol.20">
+                <div class="album-overlay">
+                    <h3>INACHE Meet Vol.20</h3>
+                </div>
+            </div>
+            <div class="album-cover" onclick="openAlbum('vol19')">
+                <img src="https://via.placeholder.com/600x800?text=INACHE+Vol.19" alt="INACHE Meet Vol.19">
+                <div class="album-overlay">
+                    <h3>INACHE Meet Vol.19</h3>
+                </div>
+            </div>
+            <div class="album-cover" onclick="openAlbum('vol18')">
+                <img src="https://via.placeholder.com/600x800?text=INACHE+Vol.18" alt="INACHE Meet Vol.18">
+                <div class="album-overlay">
+                    <h3>INACHE Meet Vol.18</h3>
+                </div>
+            </div>
+            <div class="album-cover" onclick="openAlbum('vol17')">
+                <img src="https://via.placeholder.com/600x800?text=INACHE+Vol.17" alt="INACHE Meet Vol.17">
+                <div class="album-overlay">
+                    <h3>INACHE Meet Vol.17</h3>
+                </div>
+            </div>
+            <div class="album-cover" onclick="openAlbum('vol16')">
+                <img src="https://via.placeholder.com/600x800?text=INACHE+Vol.16" alt="INACHE Meet Vol.16">
+                <div class="album-overlay">
+                    <h3>INACHE Meet Vol.16</h3>
+                </div>
+            </div>
+        </div>
+
+        <!-- Примеры полных альбомов -->
+        <div id="vol23" class="full-album">
+            <h3>INACHE Meet Vol.23</h3>
+            <div class="full-gallery">
+                <!-- Фото здесь -->
+            </div>
+            <button class="back-btn" onclick="closeAlbum()">← Вернуться к альбомам</button>
+        </div>
+        <!-- Добавь остальные vol22-vol16 по аналогии -->
+
+    </div>
+
+    <div id="legends" class="tab-content">
+        <h2>Ушедшие легенды</h2>
+        <div class="legends">
+            <div class="legend-item">
+                <img src="https://via.placeholder.com/400x300?text=Группа+1" alt="Группа 1">
+                <h3>Группа 1</h3>
+                <p>Краткое описание: Выступали в 2020 году, исполняли каверы на рок-хиты 80-х.</p>
+            </div>
+            <div class="legend-item">
+                <img src="https://via.placeholder.com/400x300?text=Группа+2" alt="Группа 2">
+                <h3>Группа 2</h3>
+                <p>Краткое описание: Осенний фестиваль 2022, поп-каверы с современным твистом.</p>
+            </div>
+        </div>
+    </div>
+
+    <div id="application" class="tab-content">
+        <div class="application-form">
+            <h2>Анкета для желающих выступить</h2>
+            <p style="text-align:center; margin-bottom:30px;">Заполните форму, и мы свяжемся с вами!</p>
+
+            <label for="band-name">1) Название группы *</label>
+            <input type="text" id="band-name" name="band-name" required placeholder="Введите название вашей группы">
+
+            <label for="songs">2) Список песен, которые хотите исполнить *</label>
+            <textarea id="songs" name="songs" required placeholder="Перечислите песни (по одной на строку или через запятую)&#10;Например:&#10;Metallica - Enter Sandman&#10;Queen - Bohemian Rhapsody&#10;..."></textarea>
+
+            <label for="contacts">3) Контакты для связи (телефон, email, соцсети) *</label>
+            <textarea id="contacts" name="contacts" required placeholder="Как с вами можно связаться?"></textarea>
+
+            <label for="additional">4) Дополнительная информация (по желанию)</label>
+            <textarea id="additional" name="additional" placeholder="Расскажите о себе, опыте выступлений, ссылки на записи и т.д."></textarea>
+
+            <button type="button">Отправить анкету</button>
+        </div>
+    </div>
+
+    <footer>
+        <p>&copy; 2026 INⱯCHE Festival</p>
+    </footer>
+
+    <script>
+        function openTab(evt, tabName) {
+            var i, tabcontent, tablinks;
+
+            tabcontent = document.getElementsByClassName("tab-content");
+            for (i = 0; i < tabcontent.length; i++) {
+                tabcontent[i].classList.remove("active");
+            }
+
+            tablinks = document.querySelectorAll("nav button");
+            for (i = 0; i < tablinks.length; i++) {
+                tablinks[i].classList.remove("active");
+            }
+
+            document.getElementById(tabName).classList.add("active");
+            evt.currentTarget.classList.add("active");
+
+            if (tabName === 'gallery') {
+                document.getElementById('albumsGrid').style.display = 'grid';
+                var fullAlbums = document.getElementsByClassName('full-album');
+                for (i = 0; i < fullAlbums.length; i++) {
+                    fullAlbums[i].classList.remove('active');
+                }
+            }
+        }
+
+        function openAlbum(albumId) {
+            document.getElementById('albumsGrid').style.display = 'none';
+            document.getElementById(albumId).classList.add('active');
+        }
+
+        function closeAlbum() {
+            document.getElementById('albumsGrid').style.display = 'grid';
+            var fullAlbums = document.getElementsByClassName('full-album');
+            for (var i = 0; i < fullAlbums.length; i++) {
+                fullAlbums[i].classList.remove('active');
+            }
+        }
+
+        function updateCountdown() {
+            const eventDate = new Date('2026-04-26T19:00:00');
+            const now = new Date();
+            const diff = eventDate - now;
+
+            if (diff <= 0) {
+                document.getElementById('countdown').innerHTML = 'Фестиваль уже начался!';
+                return;
+            }
+
+            const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+            const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+            const seconds = Math.floor((diff % (1000 * 60)) / 1000);
+
+            document.getElementById('countdown').innerHTML = 
+                `${days} дней ${hours} часов ${minutes} минут ${seconds} секунд`;
+        }
+
+        setInterval(updateCountdown, 1000);
+        updateCountdown();
+
+        // Обработка кнопки отправки анкеты
+        document.querySelector('.application-form button').addEventListener('click', function() {
+            alert('Спасибо! Ваша анкета отправлена. Мы свяжемся с вами в ближайшее время.');
+        });
+    </script>
+</body>
+</html>
